@@ -12,7 +12,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  final bool isDarkMode = false;
+  final bool isDarkMode = true;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
