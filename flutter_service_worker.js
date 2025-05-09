@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "3cccc4481e749970cc6a3981a3f61d1c",
+const RESOURCES = {"flutter_bootstrap.js": "fa37bbcc70cbf08380708bd75140cf16",
 "assets/AssetManifest.bin.json": "69a99f98c8b1fb8111c5fb961769fcd8",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "33b7d9392238c04c131b6ce224e13711",
 "assets/AssetManifest.json": "2efbb41d7877d10aac9d091f58ccd7b9",
@@ -31,7 +31,7 @@ const RESOURCES = {"flutter_bootstrap.js": "3cccc4481e749970cc6a3981a3f61d1c",
 "canvaskit/chromium/canvaskit.wasm": "c054c2c892172308ca5a0bd1d7a7754b",
 "index.html": "e38fdbbc3c0b49497b7ae10b6c3ea220",
 "/": "e38fdbbc3c0b49497b7ae10b6c3ea220",
-"main.dart.js": "5c1142826fb02ff1ef5d584ced238e20"};
+"main.dart.js": "c07a63b585b87703b56dfd6e3288f558"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",
