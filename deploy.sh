@@ -3,18 +3,7 @@
 # Stop on errors
 set -e
 
-# Step 1: Build the Flutter web app
-echo "Building the Flutter web app..."
-flutter build web --release --base-href="/myapp/"
-
-# Step 2: Verify the build was successful
-if [ ! -d "build/web" ]; then
-    echo "Error: Build folder not found. Make sure the build was successful."
-    exit 1
-fi
-echo "Build completed successfully."
-
-# Step 3: Check if we're on the main branch before proceeding
+# Step 1: Check if we're on the main branch before proceeding
 current_branch=$(git branch --show-current)
 if [ "$current_branch" != "main" ]; then
     echo "Error: Please run this script from the main branch. Currently on: $current_branch"
@@ -22,15 +11,18 @@ if [ "$current_branch" != "main" ]; then
 fi
 echo "Confirmed on the main branch."
 
-# Step 4: Create a temporary folder to store build files
-TEMP_DIR=$(mktemp -d)
-echo "Temporary directory created at: $TEMP_DIR"
+# Step 2: Build the Flutter web app with the correct base href
+echo "Building the Flutter web app with base href /myappRepo/..."
+flutter build web --release --base-href="/myappRepo/"
 
-# Copy the entire build folder to the temporary directory
-cp -r build/web/* "$TEMP_DIR/"
-echo "Copied build files to temporary directory."
+# Step 3: Verify the build was successful
+if [ ! -d "build/web" ]; then
+    echo "Error: Build folder not found. Make sure the build was successful."
+    exit 1
+fi
+echo "Build completed successfully."
 
-# Step 5: Switch to gh-pages branch or create it if it doesn't exist
+# Step 4: Switch to gh-pages branch or create it if it doesn't exist
 if git show-ref --verify --quiet refs/heads/gh-pages; then
     echo "Switching to existing gh-pages branch..."
     git checkout gh-pages
@@ -39,30 +31,27 @@ else
     git checkout -b gh-pages
 fi
 
-# Step 6: Remove old files from gh-pages branch
-echo "Cleaning up old files..."
-git rm -rf . || true
+# Step 5: Copy the build folder from the main branch to the root of gh-pages
+echo "Copying the build folder to the root of gh-pages..."
+git checkout main -- build/web
+mv build/web ./build
 
-# Step 7: Move the copied build files from the temporary directory to the root of gh-pages
-echo "Moving build files to the root of gh-pages..."
-mv "$TEMP_DIR"/* ./
+# Step 6: Move the contents of the build folder to the root
+echo "Moving the contents of the build folder to the root of gh-pages..."
+mv ./build/* ./
 
-# Step 8: Verify the contents in the root of gh-pages
-echo "Files in gh-pages root:"
-ls -la
+# Step 7: Remove the empty build folder
+echo "Removing the empty build folder..."
+rm -rf build
 
-# Step 9: Add, commit, and push the changes
-echo "Committing and pushing changes..."
+# Step 8: Add, commit, and push the changes
+echo "Committing and pushing changes to gh-pages..."
 git add .
 git commit -m "Deploy updated web app to gh-pages"
 git push origin gh-pages
 
-# Step 10: Switch back to the main branch
+# Step 9: Switch back to the main branch
 echo "Switching back to the main branch..."
 git checkout main
 
-# Clean up the temporary directory
-rm -rf "$TEMP_DIR"
-echo "Temporary directory cleaned up."
-
-echo "Deployment complete! Visit: https://username.github.io/myapp/"
+echo "Deployment complete! Visit: https://username.github.io/myappRepo/"
